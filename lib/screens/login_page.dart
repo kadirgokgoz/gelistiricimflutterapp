@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: _isLoading ? Center(child: CircularProgressIndicator()) : ListView(
           children: <Widget>[
-
             headerSection(),
              Container(
                 child: Padding(
@@ -44,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-
             textSection(),
             buttonSection(),
           ],
@@ -52,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
   signIn(String userName, pass) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {
@@ -65,17 +61,11 @@ class _LoginPageState extends State<LoginPage> {
       jsonResponse = json.decode(response.body);
 
       if(jsonResponse != null) {
-        setState(() {
-
-
-          _isLoading = false;
-
+          setState(() {
+            _isLoading = false;
         });
         sharedPreferences.setString("token", jsonResponse['token']);
-
-
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MyApp()), (Route<dynamic> route) => false);
-
       }
     }
     else {
@@ -127,10 +117,8 @@ class _LoginPageState extends State<LoginPage> {
       ),
     ],);
   }
-
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
-
   Container textSection() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
@@ -165,7 +153,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
   Container headerSection() {
     return Container(
       width: 100,

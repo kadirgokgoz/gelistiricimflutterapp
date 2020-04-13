@@ -51,6 +51,18 @@ Container headerSection() {
     ),
   );
 }
+alertGoster(BuildContext context)
+{
+  var alert=AlertDialog(title: Text("Hatalı veri"),content: Text("Kullanıcı adı veya Şifre Hatalı"),actions: <Widget>[MaterialButton(elevation:5,child:Text("kapat"),onPressed: (){Navigator.of(context).pop();},)],);
+  return showDialog(context: context,builder: (context){ return alert;});
+}
+alertGosterBasarili(BuildContext context)
+{
+  var alert=AlertDialog(title: Text("Kayıt Başarılı"),content: Text("Kayıt Başarıyla Oluşturuldu"),actions: <Widget>[MaterialButton(elevation:5,child:Text("kapat"),onPressed: (){Navigator.push(context,
+    MaterialPageRoute(builder:
+        (context) => SignInPage()),);},)],);
+  return showDialog(context: context,builder: (context){ return alert;});
+}
 Widget _Register(BuildContext context)
 {
   final TextEditingController emailController = new TextEditingController();
@@ -60,19 +72,24 @@ Widget _Register(BuildContext context)
   List<Article> postData=[];
   Article article;
   void addData() {
-    http.post("https://gelistiricim.herokuapp.com/api/register",headers: {"Accept" : "application/json"},body:({
-      "userName":userNameController.text,
-      "password":passwordController.text,
-      "email":emailController.text
-    }) ).then((response){print(response.statusCode);});
-
-
-
-
-
+    http.post("https://gelistiricim.herokuapp.com/api/register",headers: {'Content-Type' : 'application/x-www-form-urlencoded'},body:({
+      'userName':userNameController.text,
+      'password':passwordController.text,
+      'email':emailController.text
+    }) ).then((response){
+      if(response.statusCode!=201)
+      {
+          alertGoster(context);
+      }
+      else
+        {
+          alertGosterBasarili(context);
+        }
+    });
 
 
   }
+
   final userIDField = TextFormField(
     obscureText: false,
     controller: userNameController,
@@ -176,7 +193,7 @@ Widget _Register(BuildContext context)
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
 
-                Image.asset("image/kayitol.png"),
+
 
 
 

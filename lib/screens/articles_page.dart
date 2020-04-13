@@ -8,9 +8,6 @@ class ArticlesPage extends StatelessWidget {
 
 
   ArticlesPage();
-
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
