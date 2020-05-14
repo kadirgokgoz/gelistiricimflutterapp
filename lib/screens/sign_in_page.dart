@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gelistiricimapp/screens/login_page.dart';
 
 import 'package:gelistiricimapp/widgets/social_log_in_button.dart';
-import 'kullanicigiris.dart';
+
 
 
 

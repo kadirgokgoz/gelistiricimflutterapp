@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gelistiricimapp/screens//sign_in_page.dart';
 import 'package:gelistiricimapp/screens//kullanicigiris.dart';
+import 'package:gelistiricimapp/screens/kullanicigiris.dart';
+import 'package:gelistiricimapp/screens/login_page.dart';
+import 'package:gelistiricimapp/screens/sign_in_page.dart';
 import 'package:gelistiricimapp/widgets/bottom_navigation_bar.dart';
 import 'package:gelistiricimapp/screens/My_Profile.dart';
 import "package:http/http.dart" as http;

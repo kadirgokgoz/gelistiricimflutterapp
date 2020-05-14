@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gelistiricimapp/models/education.dart';
 import 'package:gelistiricimapp/screens/My_Profile.dart';
 import 'package:gelistiricimapp/main.dart';
 import 'package:gelistiricimapp/screens/MyFavorites.dart';
@@ -61,13 +62,31 @@ class _MyAppState extends State<MyApp> {
   Future<List<Article>> getPosts() async{
     var data=await http.get("https://gelistiricim.herokuapp.com/api/post");
     var jsondata=json.decode(data.body);
-    for (var post in jsondata)
+    var veri=jsondata["data"];
+    for (var post in veri)
       {
-        article=Article(title: post["title"],content: post["body"],image: post["image_url"]);
+        article=Article(title: post["title"],content: post["content"],image: post["image_url"]);
         postData.add(article);
       }
 
     return postData;
+
+
+  }
+  List<Education> eduData=[];
+  Education education;
+  Future<List<Education>> getEdus() async{
+    var data=await http.get("https://gelistiricim.herokuapp.com/api/education");
+    var jsondata=json.decode(data.body);
+    var gelenVeri=jsondata["data"];
+    for (var post in gelenVeri)
+    {
+
+      education=Education(id: post["_id"],title: post["title"],content: post["description"],image: post["image"]);
+      eduData.add(education);
+    }
+
+    return eduData;
 
 
   }
@@ -175,7 +194,24 @@ class _MyAppState extends State<MyApp> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EducationPage()));
+                          builder: (context) => EducationPage()
+                      )
+                  );
+                },
+
+              ),
+              ListTile(
+                title: Text("Çıkış Yap"),
+                leading: Icon(
+                  FontAwesomeIcons.signOutAlt,
+                  color: Colors.deepPurple,
+                ),
+                onTap: () {
+                  // ignore: unnecessary_statements
+                  sharedPreferences.getString("token")==null;
+                  Navigator.of(context).pop();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignInPage()));
                 },
               ),
             ],
@@ -188,7 +224,7 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ArticleSinglePage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ArticleSinglePage(article: postData[currentPage.toInt()],)));
                 },
                 child: Stack(
                   children: <Widget>[
@@ -226,7 +262,7 @@ class _MyAppState extends State<MyApp> {
                           return ListView.builder(
                             shrinkWrap: true,
                             physics: ScrollPhysics(parent: BouncingScrollPhysics()),
-                            itemCount: 2,
+                            itemCount: 5,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context)=> ArticleSinglePage(article: snapshot.data[index],)));},
@@ -326,11 +362,59 @@ class _MyAppState extends State<MyApp> {
 
                     height: 250,
                     margin: EdgeInsets.symmetric(horizontal: 20),
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: educations(),
+                    child: FutureBuilder(
+                            future: getEdus(),
+                            builder: (BuildContext context,AsyncSnapshot snapshot){
+                              if(snapshot.data==null){return Container(child: Center(child: Text("yükleniyor..."),),);}
+                              else{
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+                                  itemCount: 3,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 25, horizontal: 12),
+                                      child: Container(
+                                        height: 220,
+                                        width: 135,
+                                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(30),boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.black12,
+                                              blurRadius: 10,
+                                              offset: Offset(0.0, 10.0))
+                                        ]),
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            Navigator.push(context,
+                                                MaterialPageRoute(builder: (context) => EducationSinglePage(education: snapshot.data[index],)));
+                                          } ,
+                                          child: Column(
+                                            children: <Widget>[
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight: Radius.circular(30) ),
+                                                child: Image(
+
+                                                    image: NetworkImage(snapshot.data[index].image,
+                                                    ),width: double.infinity, height: 130, fit: BoxFit.cover,)
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(top:8.0,left: 8,right: 8),
+                                                child: Text(snapshot.data[index].title,textAlign: TextAlign.center,style: TextStyle(
+                                                    fontSize: 16
+                                                ),),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );}
+                            }
+                        )
                     ),
-                  ),
+
                 ],
               ),
               SizedBox(
@@ -409,4 +493,6 @@ class _MyAppState extends State<MyApp> {
     }
     return educationList;
   }
+
+
 }
