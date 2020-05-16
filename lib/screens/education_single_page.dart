@@ -3,6 +3,7 @@ import 'package:gelistiricimapp/models/article.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gelistiricimapp/models/education.dart';
 import 'package:gelistiricimapp/screens/education_details_page.dart';
+import 'package:gelistiricimapp/screens/education_page.dart';
 import "package:gelistiricimapp/widgets/bottom_navigation_bar.dart";
 import "package:http/http.dart" as http;
 import "dart:async";
@@ -23,7 +24,7 @@ class _EducationSinglePageState extends State<EducationSinglePage> {
   Education lesson;
 
   Future<List<Education>> getEdus() async{
-    print(widget.education.id);
+
     var data=await http.get("https://gelistiricim.herokuapp.com/api/education/detail/"+widget.education.id);
     var jsondata=json.decode(data.body);
     var gelenVeri=jsondata["data"];
@@ -55,6 +56,14 @@ class _EducationSinglePageState extends State<EducationSinglePage> {
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
+              leading:FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => EducationPage()), (Route<dynamic> route) => false);
+
+                },
+                child: Icon(Icons.arrow_back,color: Colors.deepPurple,
+                ),
+              ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(30),
@@ -70,9 +79,7 @@ class _EducationSinglePageState extends State<EducationSinglePage> {
               backgroundColor: Colors.white,
               iconTheme: IconThemeData(color: Colors.deepPurple),
               actions: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Icon(FontAwesomeIcons.bookmark))
+
               ],
               expandedHeight: (MediaQuery.of(context).size.height / 2),
               floating: false,

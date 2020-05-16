@@ -9,9 +9,9 @@ import "dart:async";
 import "dart:convert";
 
 class EducationPage extends StatefulWidget {
+  const EducationPage({Key key}) : super(key: key);
 
 
-  EducationPage();
 
   @override
   _EducationPageState createState() => _EducationPageState();
@@ -51,6 +51,15 @@ class _EducationPageState extends State<EducationPage> {
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomRight: Radius.circular(30),bottomLeft: Radius.circular(30))),
+              leading:
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => bottomNavigationBar()), (Route<dynamic> route) => false);
+
+                },
+                child: Icon(Icons.arrow_back,color: Colors.deepPurple,
+                ),
+              ),
               title: Image(
                   image: AssetImage(
                     "assets/gelistiricimmor.png",
@@ -61,11 +70,7 @@ class _EducationPageState extends State<EducationPage> {
               centerTitle: true,
               backgroundColor: Colors.white,
               iconTheme: IconThemeData(color: Colors.deepPurple),
-              actions: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Icon(FontAwesomeIcons.bookmark))
-              ],
+
               expandedHeight: (MediaQuery.of(context).size.height / 2),
               floating: false,
               pinned: true,
@@ -103,6 +108,7 @@ class _EducationPageState extends State<EducationPage> {
                     itemCount: eduData.length,
                     itemBuilder: (context, index) {
                       return Stack(children: <Widget>[
+
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context)=> EducationSinglePage(education: snapshot.data[index],)));
@@ -137,7 +143,7 @@ class _EducationPageState extends State<EducationPage> {
                                     CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        width: 170,
+                                        width: 200,
                                         child: Text(
                                           snapshot.data[index].title,
                                           style: TextStyle(

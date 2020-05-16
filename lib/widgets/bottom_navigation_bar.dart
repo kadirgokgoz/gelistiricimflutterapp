@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gelistiricimapp/screens/GameLoginPage.dart';
 import 'package:gelistiricimapp/screens/My_Profile.dart';
 import 'package:gelistiricimapp/mainPage.dart';
 import 'package:gelistiricimapp/screens/MyFavorites.dart';
+import 'package:gelistiricimapp/screens/education_page.dart';
 
 class bottomNavigationBar extends StatefulWidget {
   @override
@@ -17,13 +19,13 @@ class _BottomNavigationBarControllerState
     MyApp(
       key: PageStorageKey('Anasayfa'),
     ),
-    MyFavorites(
-      key: PageStorageKey('Favorilerim'),
+    EducationPage(
+      key: PageStorageKey('Eğitim'),
     ),
     GameLogin(
       key: PageStorageKey('Oyun'),
     ),
-    UserProfile(
+    UserProfilePage(
       key: PageStorageKey('Profilim'),
     ),
   ];
@@ -43,9 +45,9 @@ class _BottomNavigationBarControllerState
       BottomNavigationBarItem(
           icon: Icon(Icons.home), title: Text('Anasayfa')),
       BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border), title: Text('Favorilerim')),
+          icon: Icon(FontAwesomeIcons.university), title: Text('Eğitim')),
       BottomNavigationBarItem(
-          icon: Icon(Icons.gamepad), title: Text('Oyun')),
+          icon: Icon(Icons.games), title: Text('Oyun')),
       BottomNavigationBarItem(
           icon: Icon(Icons.person), title: Text('Profilim')),
     ],

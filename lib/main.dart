@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gelistiricimapp/screens//sign_in_page.dart';
 import 'package:gelistiricimapp/screens//kullanicigiris.dart';
 import 'package:gelistiricimapp/screens/kullanicigiris.dart';
 import 'package:gelistiricimapp/screens/login_page.dart';
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
       ),
 
 
-      home: bottomNavigationBar(),
+      home: SignInPage(),
 
 
     );

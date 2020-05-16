@@ -1,44 +1,32 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:gelistiricimapp/main.dart';
 import 'package:gelistiricimapp/models/article.dart';
 import 'package:gelistiricimapp/models/user.dart';
+import 'package:gelistiricimapp/screens/articles_page.dart';
 import "package:http/http.dart" as http;
 import "dart:async";
 import "dart:convert";
 import 'package:shared_preferences/shared_preferences.dart';
-import "dart:io";
+import"dart:io";
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 
 import 'article_single_page.dart';
 
-class UserProfile extends StatefulWidget {
-  const UserProfile({Key key}) : super(key: key);
+// ignore: must_be_immutable
+class OtherUserProfilePage extends StatefulWidget {
+  String username;
+
+  OtherUserProfilePage({this.username});
 
   @override
-  _UserProfileState createState() => _UserProfileState();
+  _OtherUserProfilePageState createState() => _OtherUserProfilePageState();
 }
 
-class _UserProfileState extends State<UserProfile> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "User Profile",
-      debugShowCheckedModeBanner: false,
-      home: UserProfilePage(),
-    );
-  }
-}
-
-class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({Key key}) : super(key: key);
-
-  @override
-  _UserProfilePageState createState() => _UserProfilePageState();
-}
-
-class _UserProfilePageState extends State<UserProfilePage> {
+class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
   String fullName = "Hasancan İsbeceren";
 
   String status = "Software Developer";
@@ -51,152 +39,184 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String posts = "24";
 
   String scores = "450";
-  File photo = null;
 
-  /*checkLoginStatus() async {
-
-     if(sharedPreferences.getString("token") == null) {
-       print("null");
-     }
-     else
-     {
-       print(sharedPreferences.getString("token"));
-     }
-   }*/
+  List<User> userData = [];
+  User user;
   Article article;
-  List<Article> postData = [];
+  String image;
+  List<Article> postData=[];
   String postContent;
   String postImage;
-
   Future<List<Article>> getPosts() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString("token");
-    var data = await http.get("https://gelistiricim.herokuapp.com/api/profile",
-        headers: {'x-access-token': token});
+    var data = await http.get("https://gelistiricim.herokuapp.com/api/profile/"+widget.username);
     var jsondata = json.decode(data.body);
-    var veri = jsondata["user_posts"];
+    var veri = jsondata["data"]["user_posts"];
     //print(veri);
+    var username;
+    String name;
 
-    for (int i = 0; i < 5; i++) {
+    for (int i=0; i<5;i++) {
+
+
       article = Article(
           title: veri[i]["title"],
-          content: veri[i]["content"],
-          image: veri[i]["image_url"]);
+          content: veri[i]["slug"],
+        image: veri[i]["image_url"]
+
+      );
 
       postData.add(article);
+
     }
 
     return postData;
   }
-  alertGoster(BuildContext context)
-  {
-    var alert=AlertDialog(title: Text("Fotoğraf kaydı başarılı"),content: Text("Değişiklikleri görebilmek için tekrar giriş yapmalısınız..."),actions: <Widget>[MaterialButton(elevation:5,child:Text("kapat"),onPressed: (){Navigator.of(context).pop();},)],);
-    return showDialog(context: context,builder: (context){ return alert;});
-  }
-  List<User> userData = [];
-  User user;
-
-  void open_gallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      photo = image;
-    });
 
 
-
-    print(photo);
-  }
-
-  // ignore: non_constant_identifier_names
-
-  Future<List<User>> getUser() async {
+  Future<User> getUser() async {
     //getPosts();
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString("token");
-    var data = await http.get("https://gelistiricim.herokuapp.com/api/profile",
-        headers: {'x-access-token': token});
+    //print(widget.username);
+    var data = await http.get("https://gelistiricim.herokuapp.com/api/profile/"+widget.username);
     var jsondata = json.decode(data.body);
-    var veri = jsondata["data"];
 
-    user = User(
-        username: veri["userName"],
-        role: veri["role"],
-        email: veri["email"],
-        image: veri["images"]);
+    var veri = jsondata["data"]["user_data"];
+    //print(veri);
+    var postveri = jsondata["data"]["user_posts"];
+    //print(postveri);
 
-    userData.add(user);
+    /*for(int i=0; i<5 ; i++) {
+      String degisken=postveri[i]["title"];
+      print(degisken);
+      postTitle.add(degisken);
 
-    return userData;
+    }*/
+  //print(postTitle);
+
+
+
+
+    user = User(username: veri["username"],email: veri["email"],image: veri["images"]);
+    return user;
   }
 
+  @override
+  Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    //checkLoginStatus();
+
+
+    return Scaffold(
+      appBar: new AppBar(
+
+        leading:FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+
+          },
+          child: Icon(Icons.arrow_back,color: Colors.deepPurple,
+          ),
+        ),
+
+        title: Image(
+            image: AssetImage(
+              "assets/gelistiricimmor.png",
+            ),
+            fit: BoxFit.cover,
+            height: 31,
+            width: 230),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.deepPurple),
+
+      ),
+      body: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+
+            _buildCoverImage(screenSize),
+            SafeArea(
+              child: FutureBuilder(
+                  future: getUser(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.data == null) {
+                      return Container(
+                        child: Center(
+                          child: Text("yükleniyor..."),
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          physics:
+                          ScrollPhysics(parent: BouncingScrollPhysics()),
+                          itemCount: 1,
+                          itemBuilder: (context, index) {
+
+                            return Column(
+                              children: <Widget>[
+                                SizedBox(height: screenSize.height / 6.4),
+                                _buildProfileImage(snapshot.data.image),
+                                _buildFullName(snapshot.data.username),
+                                _buildStatus(context,snapshot.data.email),
+
+
+
+
+                                //    _buildSeparator(screenSize),
+                                //    _buildGetInTouch(context),
+                                SizedBox(height: 6.0),
+                                Text(
+                                  "Paylaşımlar",
+                                  style: TextStyle(
+                                      fontFamily: 'yazi',
+                                      color: Colors.black,
+                                      fontSize: 28.0,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                SizedBox(height: 10.0),
+                                _buildArticle(),
+                              ],
+                            );
+                          });
+                    }
+                  }),
+            )
+          ],
+        ),
+      ),
+    );
+  }
   Widget _buildCoverImage(Size screenSize) {
     return Container(
       height: screenSize.height / 3.0,
       decoration: BoxDecoration(
           image: DecorationImage(
-        image: NetworkImage(
-            'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxH5rd9eDAjcFyv45SRYAFMIcKL_PArgVSL403ulRUWEndVKv7gpeGBg07J1UFsOujLQE41aHLJ2hGud_uwtGNkfH2Zb3TlWlTsJR32LrF9N_x0Bq-uxQYVYse3w'),
-        fit: BoxFit.cover,
-      )),
+            image: NetworkImage('https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxH5rd9eDAjcFyv45SRYAFMIcKL_PArgVSL403ulRUWEndVKv7gpeGBg07J1UFsOujLQE41aHLJ2hGud_uwtGNkfH2Zb3TlWlTsJR32LrF9N_x0Bq-uxQYVYse3w'),
+            fit: BoxFit.cover,
+          )),
     );
   }
 
-  resimSec(BuildContext context) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString("token");
-    Map<String, String> headers = {
-      'x-access-token': token,
-      'Content-Type': 'multipart/form-data'
-    };
-    Stream st = photo.openRead();
-    var stream = new http.ByteStream(st.cast());
-    var length = await photo.length();
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            "https://gelistiricim.herokuapp.com/api/profile/upload_image"));
-
-    var multipartFileSign = new http.MultipartFile(
-        "profile_image", stream, length,
-        filename: basename(photo.path),
-        contentType: new MediaType('image', 'jpg'));
-    request.files.add(multipartFileSign);
-    request.headers.addAll(headers);
-    var res = await request.send();
-
-    res.stream.transform(utf8.decoder).listen((value) {
-      print(value);
-    });
-    if(res.statusCode==200){
-      alertGoster(context);
-    }
-
-    return print(res.statusCode);
-  }
 
   Widget _buildProfileImage(String image) {
     return Center(
-      child: GestureDetector(
-        onTap: () {
-          open_gallery();
-        },
-        child: Container(
-          width: 140.0,
-          height: 140.0,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(image == "none"
-                  ? "https://i.ya-webdesign.com/images/avatar-png-1.png"
-                  : "https://gelistiricim.herokuapp.com/uploads/" + image),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.circular(80.0),
-            border: Border.all(
-              color: Colors.white,
-              width: 10.0,
-            ),
+      child: Container(
+        width: 140.0,
+        height: 140.0,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(image=="none"?"https://i.ya-webdesign.com/images/avatar-png-1.png":"https://gelistiricim.herokuapp.com/uploads/"+image),
+            fit: BoxFit.cover,
           ),
+          borderRadius: BorderRadius.circular(80.0),
+          border: Border.all(
+            color: Colors.white,
+            width: 10.0,
+          ),
+
         ),
+
       ),
     );
   }
@@ -272,31 +292,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
+
           _buildStatItem("Makale Sayısı", posts),
+
         ],
       ),
     );
   }
 
-  Widget _buildBio(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      padding: EdgeInsets.all(6.0),
-      child: Column(children: <Widget>[
-        RaisedButton(
-          onPressed: () {
-            resimSec(context);
-          },
-          elevation: 0.0,
-          color: Colors.purple,
-          child: Text("Fotoğrafı Kaydet", style: TextStyle(color: Colors.white70)),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        ),
-        Text("Değişiklileri görebilmek için tekrar giriş yapmalısınız")
-      ]),
-    );
-  }
+
 
   Widget _buildSeparator(Size screenSize) {
     return Center(
@@ -359,7 +363,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 children: <Widget>[
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
@@ -408,70 +412,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             }));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-    //checkLoginStatus();
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Stack(
-          children: <Widget>[
-            _buildCoverImage(screenSize),
-            SafeArea(
-              child: FutureBuilder(
-                  future: getUser(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.data == null) {
-                      return Container(
-                        child: Center(
-                          child: Text("yükleniyor..."),
-                        ),
-                      );
-                    } else {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          physics:
-                              ScrollPhysics(parent: BouncingScrollPhysics()),
-                          itemCount: 1,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: <Widget>[
-                                SizedBox(height: screenSize.height / 6.4),
-                                _buildProfileImage(snapshot.data[index].image),
-                                _buildFullName(snapshot.data[index].username),
-                                _buildStatus(
-                                    context, snapshot.data[index].email),
 
-                                photo == null
-                                    ? SizedBox(
-                                        height: 1,
-                                      )
-                                    : _buildBio(context),
 
-                                //    _buildSeparator(screenSize),
-                                //    _buildGetInTouch(context),
-                                SizedBox(height: 6.0),
-                                Text(
-                                  "Paylaşımlar",
-                                  style: TextStyle(
-                                      fontFamily: 'yazi',
-                                      color: Colors.black,
-                                      fontSize: 28.0,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                SizedBox(height: 10.0),
-                                _buildArticle(),
-                              ],
-                            );
-                          });
-                    }
-                  }),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 }

@@ -60,7 +60,7 @@ class SignInPage extends StatelessWidget {
                   MaterialPageRoute(builder:
                       (context) => LoginPage()),);
               },
-              butonText: "Email ve Şifre ile Giriş Yapın",
+              butonText: "Kullanıcı Adı ve Şifre ile Giriş Yapın",
               textColor: Colors.white,
               butonIcon: Icon(
                 Icons.email,
@@ -69,15 +69,7 @@ class SignInPage extends StatelessWidget {
               ),
               butonColor: Colors.black26,
             ),
-            SocialLoginButton(
-              onPressed: () {},
-              butonColor: Colors.black26,
-              butonIcon: Icon(Icons.supervised_user_circle,
-                  color: Colors.white,
-              size: 40
-              ),
-              butonText: "Misafir Girişi",
-            ),
+
 
           ],
         ),

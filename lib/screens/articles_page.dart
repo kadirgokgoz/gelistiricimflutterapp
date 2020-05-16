@@ -7,6 +7,7 @@ import "package:http/http.dart" as http;
 import "dart:async";
 import "dart:convert";
 
+import 'Profile.dart';
 import 'article_single_page.dart';
 
 class ArticlesPage extends StatefulWidget {
@@ -22,14 +23,21 @@ class _ArticlesPageState extends State<ArticlesPage> {
   Article article;
 
   Future<List<Article>> getPosts() async {
-    var data = await http.get("https://gelistiricim.herokuapp.com/api/post");
+    var data = await http.get("https://gelistiricim.herokuapp.com/api/post?limit=40");
     var jsondata = json.decode(data.body);
     var veri = jsondata["data"];
+    var username;
+    String name;
     for (var post in veri) {
+
+
       article = Article(
           title: post["title"],
           content: post["content"],
-          image: post["image_url"]);
+          image: post["image_url"],
+         userName: post["author"]["userName"]
+      );
+
       postData.add(article);
     }
 
@@ -52,6 +60,14 @@ class _ArticlesPageState extends State<ArticlesPage> {
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
+              leading:FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => bottomNavigationBar()), (Route<dynamic> route) => false);
+
+                },
+                child: Icon(Icons.arrow_back,color: Colors.deepPurple,
+                ),
+              ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(30),
@@ -66,11 +82,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
               centerTitle: true,
               backgroundColor: Colors.white,
               iconTheme: IconThemeData(color: Colors.deepPurple),
-              actions: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Icon(FontAwesomeIcons.bookmark))
-              ],
+
               expandedHeight: (MediaQuery.of(context).size.height / 2),
               floating: false,
               pinned: true,
@@ -110,17 +122,18 @@ class _ArticlesPageState extends State<ArticlesPage> {
                     itemCount: postData.length,
                     itemBuilder: (context, index) {
                       return Stack(children: <Widget>[
+
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context)=> ArticleSinglePage(article: snapshot.data[index],)));
                           },
                           child: Container(
-                            margin: EdgeInsets.fromLTRB(40, 10, 20, 10),
+                            margin: EdgeInsets.fromLTRB(15, 10, 20, 10),
                             height: 170,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(5),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.8),
@@ -132,7 +145,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                               ],
                             ),
                             child: Padding(
-                              padding: EdgeInsets.fromLTRB(100, 10, 20, 10),
+                              padding: EdgeInsets.fromLTRB(125, 10, 20, 10),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,13 +157,13 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        width: 120,
+                                        width: 200,
                                         child: Text(
                                           snapshot.data[index].title,
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w600),
-                                          maxLines: 2,
+                                          maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -163,6 +176,17 @@ class _ArticlesPageState extends State<ArticlesPage> {
                                     snapshot.data[index].content,
                                     maxLines: 5,
                                   ),
+                                  SizedBox(height: 20,),
+                                  GestureDetector(
+                                    onTap:() {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> OtherUserProfilePage(username: snapshot.data[index].userName)));
+                                    } ,
+                                    child: Text(
+                                      snapshot.data[index].userName,
+                                      maxLines: 5,
+
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -173,7 +197,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
                           top: 15,
                           bottom: 15,
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(5),
                             child: Image(
                               width: 110,
                               image: NetworkImage(

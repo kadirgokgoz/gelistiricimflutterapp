@@ -53,7 +53,7 @@ class CardScrollWidget extends StatelessWidget {
 
         List<Widget> cardList = new List();
 
-        for (var i = 0; i < 6; i++) {
+        for (var i = 1; i < 6; i++) {
           var delta = i - currentPage;
           bool isOnRight = delta > 0;
 
@@ -97,7 +97,7 @@ class CardScrollWidget extends StatelessWidget {
                                     fit: StackFit.expand,
                                     children: <Widget>[
                                       Image(image: NetworkImage(
-                                          snapshot.data[i].image),
+                                          snapshot.data[i].image=="none"?"https://i.ya-webdesign.com/images/avatar-png-1.png":snapshot.data[i].image),
                                           fit: BoxFit.cover),
                                       Align(
                                         alignment: Alignment.bottomLeft,
@@ -115,7 +115,9 @@ class CardScrollWidget extends StatelessWidget {
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 25.0,
-                                                      fontFamily: "SF-Pro-Text-Regular")),
+                                                      fontFamily: "SF-Pro-Text-Regular"),maxLines: 4,
+                                              ),
+
                                             ),
                                             SizedBox(
                                               height: 10.0,

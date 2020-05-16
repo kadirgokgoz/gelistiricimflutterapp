@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:gelistiricimapp/screens/GamePage.dart';
+import 'package:gelistiricimapp/screens//Game.dart';
+import 'dart:async';
+import 'package:gelistiricimapp/widgets/bottom_navigation_bar.dart';
 
-
-void main() {
-  runApp(MaterialApp(title: 'Login App', home: GameLogin()));
+class GamePage extends StatefulWidget {
+  const GamePage({Key key}) : super(key: key);
+  @override
+  _GamePageState createState() => _GamePageState();
 }
 
-class GameLogin extends StatelessWidget {
-  const GameLogin({Key key}) : super(key: key);
+class _GamePageState extends State<GamePage> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 3), () {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => gamehomepage(),
+        ));
+      });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -21,20 +35,20 @@ class GameLogin extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               widthFactor: 0.6,
-              heightFactor: 1.5,
+              heightFactor: 1.3,
               child: Material(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
                 color: Colors.deepPurple[400],
                 child: Container(
                   width: 400,
-                  height: 400,
+                  height: 800,
                 ),
               ),
             ),
             Center(
               child: Container(
                 width: 400,
-                height: 400,
+                height: 600,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -42,21 +56,9 @@ class GameLogin extends StatelessWidget {
                         elevation: 10.0,
                         borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Image.asset('assets/gelistiricimmor.png',width: 250,height:80,),
+                          padding: const EdgeInsets.all(15.0),
+                          child: Image.asset('assets/gelistiricimmor.png',width: 300,height:80,),
                         )),
-
-                    Container(
-                      width: 200,
-                      height: 80,
-                      child: RaisedButton(onPressed: (){ Navigator.push(context, MaterialPageRoute(builder: (context)=> GamePage()));},color: Colors.deepPurple,textColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100.0))),
-                        child: Text('Oyuna Başla',style: TextStyle(
-                            fontSize: 23.0,
-
-
-                        ),),),
-                    )
                   ],
                 ),
               ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gelistiricimapp/models/article.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gelistiricimapp/screens/articles_page.dart';
+import 'package:gelistiricimapp/widgets/bottom_navigation_bar.dart';
 
 class ArticleSinglePage extends StatelessWidget {
   final Article article;
@@ -24,6 +26,14 @@ class ArticleSinglePage extends StatelessWidget {
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
+              leading:FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+
+                },
+                child: Icon(Icons.arrow_back,color: Colors.deepPurple,
+                ),
+              ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(30),
@@ -41,7 +51,7 @@ class ArticleSinglePage extends StatelessWidget {
               actions: <Widget>[
                 Container(
                     margin: EdgeInsets.only(right: 15),
-                    child: Icon(FontAwesomeIcons.bookmark))
+                    child: Icon(FontAwesomeIcons.heart))
               ],
               expandedHeight: (MediaQuery.of(context).size.height / 2),
               floating: false,

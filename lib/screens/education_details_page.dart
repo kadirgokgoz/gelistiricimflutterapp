@@ -17,23 +17,7 @@ class EducationDetailsPage extends StatelessWidget {
 
   Education lesson;
 
-  Future<List<Education>> getEdus() async
-  {
-    print(education.id);
-    var data=await http.get("https://gelistiricim.herokuapp.com/api/education/detail/"+education.id+"/"+education.pagenumber);
-    var jsondata=json.decode(data.body);
-    var gelenVeri=jsondata["data"];
-    for (var post in gelenVeri)
-    {
 
-      lesson=Education(title: post["title"],content: post["body"]);
-      eduData.add(lesson);
-    }
-
-    return eduData;
-
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +49,7 @@ class EducationDetailsPage extends StatelessWidget {
               centerTitle: true,
               backgroundColor: Colors.white,
               iconTheme: IconThemeData(color: Colors.deepPurple),
-              actions: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Icon(FontAwesomeIcons.bookmark))
-              ],
+
               expandedHeight: (MediaQuery.of(context).size.height / 2),
               floating: false,
               pinned: true,
@@ -96,6 +76,7 @@ class EducationDetailsPage extends StatelessWidget {
   Widget _dynamicListFunction(BuildContext context, int index) {
     return Stack(
       children: <Widget>[
+
         Padding(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Column(

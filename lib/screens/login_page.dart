@@ -3,9 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gelistiricimapp/screens/kayitol.dart';
+import 'package:gelistiricimapp/widgets/bottom_navigation_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:gelistiricimapp/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:gelistiricimapp/screens/forgotPassword_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -49,6 +52,15 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+  forgotPassword(String email) async
+  {
+    Map eposta = {
+      'email': email,
+
+    };
+    var jsonResponse = null;
+    var response = await http.post("https://gelistiricim.herokuapp.com/api/forgotpassword",body: eposta );
+  }
   signIn(String userName, pass) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {
@@ -65,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
             _isLoading = false;
         });
         sharedPreferences.setString("token", jsonResponse['token']);
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MyApp()), (Route<dynamic> route) => false);
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => bottomNavigationBar()), (Route<dynamic> route) => false);
       }
     }
     else {
@@ -113,6 +125,22 @@ class _LoginPageState extends State<LoginPage> {
           elevation: 0.0,
           color: Colors.purple,
           child: Text("Kayıt Ol", style: TextStyle(color: Colors.white70)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+        ),
+      ),
+      Container(
+        width: MediaQuery.of(context).size.width,
+        height: 40.0,
+
+        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        margin: EdgeInsets.only(top: 15.0),
+        child: RaisedButton(
+          onPressed:()=> Navigator.push(context,
+            MaterialPageRoute(builder:
+                (context) => ForgotPasswordPage()),),
+          elevation: 0.0,
+          color: Colors.purple,
+          child: Text("Şifremi unuttum", style: TextStyle(color: Colors.white70)),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
         ),
       ),

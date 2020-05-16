@@ -30,7 +30,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   http: any
+  http_parser: ^3.1.4
   shared_preferences: any
+  image_picker:
 
 
 # For information on the generic Dart part of this file, see the
@@ -48,7 +50,10 @@ flutter:
   assets:
    - assets/
    - assets/gelistiricimmor.png
-
+  fonts:
+    - family: yazi
+      fonts:
+        - asset: assets/yazi.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -61,22 +66,22 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: SF-Pro-Text-Regular
-      fonts:
-        - asset: assets/SF-Pro-Text-Regular.otf
-
-    - family: SF-Pro-Text-Bold
-      fonts:
-        - asset: assets/SF-Pro-Text-Bold.otf
-
-    - family: Calibre-Semibold
-      fonts:
-        - asset: assets/Calibre Semibold.otf
-
-    - family: CustomIcons
-      fonts:
-        - asset: assets/custom_icons.ttf
+  #fonts:
+  #  - family: SF-Pro-Text-Regular
+  #    fonts:
+  #      - asset: assets/SF-Pro-Text-Regular.otf
+  #
+  #  - family: SF-Pro-Text-Bold
+  #    fonts:
+  #      - asset: assets/SF-Pro-Text-Bold.otf
+  #
+  #  - family: Calibre-Semibold
+  #    fonts:
+  #      - asset: assets/Calibre Semibold.otf
+  #
+  #  - family: CustomIcons
+  #    fonts:
+  #      - asset: assets/custom_icons.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

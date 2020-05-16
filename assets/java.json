@@ -1,0 +1,88 @@
+[
+    {
+        "1": "Aşağıdakileden hangisi primitive type (ilkel tip) değildir?",
+        "2": "Aşağıdakilerden hangi method bir class'ın aplication olmasın sağlar?",
+        "3": "Aşağıdakilerden hangisi keyword (anahtar sözcük) değildir?",
+        "4": "Tipi int olan bir 'a' array'i için aşağıdaki ifadelerden hangisi yanlıştır.",
+        "5": "String class'ı için aşağıdakileden hangisi yanlıştır.",
+        "6": "Aşağıdakı object declaration'larından hangisi geçersizdir.",
+        "7": "Exception'larla ilgili aşağıdaki ifadelerden hangisi yanlıştır.",
+        "8": "'static' ifadesi için aşağıdakilerden hangisi yanlıştır.",
+        "9": "Aşağıdakilerden hangisi Java'da vardır.",
+        "10": "System class'ı ile ilgili aşağıdaki ifadelerden hangisi doğrudur."
+    },
+    {
+        "1": {
+            "a": "int",
+            "b": "float",
+            "c": "String",
+            "d": "char"
+        },
+        "2": {
+            "a": "public void main(String[] args)",
+            "b": "public static void main()",
+            "c": "public static void main(String[] args)",
+            "d": "public static String[] main()"
+        },
+        "3": {
+            "a": "if",
+            "b": "else",
+            "c": "end",
+            "d": "While"
+        },
+        "4": {
+            "a": "int[] a;",
+            "b": "int a[];",
+            "c": "[]int a;",
+            "d": "int a[3];"
+        },
+        "5": {
+            "a": "String s=new String(\"Godoro\")",
+            "b": "String s=new String()",
+            "c": "String s=new char[]{'G','o','d','o','r','o'}",
+            "d": "String s=new String(new char[]{'G','o','d','o','r','o'})"
+        },
+        "6": {
+            "a": "MyClass c;",
+            "b": "MyClass c=null;",
+            "c": "MyClass c=MyClass()",
+            "d": "MyCLass c=new MyClass(anObject)"
+        },
+        "7": {
+            "a": "RuntimeException'lar catch edilmek zorunda değildir.",
+            "b": "Exception'lar 'throw' keyword'uyle fırlatılırlar.",
+            "c": "Bir nesnenin 'catch' edilebilmesi için Exception class'ını extend etmesi gerekir.",
+            "d": "Bir exception bloğunda bir tane 'try', bir tane 'finally', birden fazla 'catch' olabilir."
+        },
+        "8": {
+            "a": "Static method'ları kullanmak için, class'dan instance yaratmaya gerek yoktur.",
+            "b": "Static method'lar sadece static property'leri kullanabilir.",
+            "c": "static methodlarda 'this' kullanılamayacağından yerine 'super' kullanılır.",
+            "d": "Static property'ler her class için sadece bir kere yaratılıp, her nesne için ayrı ayrı yaratılmazlar."
+        },
+        "9": {
+            "a": "Memory Access (Hafıza Erişimi)",
+            "b": "Native Code (Yerli Kod) Çağırma",
+            "c": "Global Variable (Global Değişken)",
+            "d": "Pointer (İşaretçiler)"
+        },
+        "10": {
+            "a": "System.println(\"Godoro\");",
+            "b": "System.readln()",
+            "c": "System.out.println(\"Godoro\");",
+            "d": "System.in.readln()"
+        }
+    },
+    {
+        "1": "String",
+        "2": "public static void main(String[] args)",
+        "3": "end",
+        "4": "[]int a;",
+        "5": "String s=new char[]{'G','o','d','o','r','o'}",
+        "6": "MyClass c=MyClass()",
+        "7": "Bir nesnenin 'catch' edilebilmesi için Exception class'ını extend etmesi gerekir.",
+        "8": "static methodlarda 'this' kullanılamayacağından yerine 'super' kullanılır.",
+        "9": "Global Variable (Global Değişken)",
+        "10": "System.out.println(\"Godoro\");"
+    }
+]
